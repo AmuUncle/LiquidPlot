@@ -42,13 +42,15 @@ void MainWnd::Relayout()
 
     // 滑动条
     QSlider *pSlider = new QSlider(this);
+    connect(pSlider, &QSlider::valueChanged, pLiquidPlot1, &LiquidPlot::SetPercent);
+    connect(pSlider, &QSlider::valueChanged, pLiquidPlot2, &LiquidPlot::SetPercent);
+
     pSlider->setOrientation(Qt::Horizontal);
     pSlider->setMinimum(0);
     pSlider->setMaximum(100);
     pSlider->setSingleStep(1);
+    pSlider->setValue(50);
 
-    connect(pSlider, &QSlider::valueChanged, pLiquidPlot1, &LiquidPlot::SetPercent);
-    connect(pSlider, &QSlider::valueChanged, pLiquidPlot2, &LiquidPlot::SetPercent);
 //    connect(pSlider, &QSlider::valueChanged, pLiquidPlot3, &LiquidPlot::SetPercent);
 //    connect(pSlider, &QSlider::valueChanged, pLiquidPlot4, &LiquidPlot::SetPercent);
 

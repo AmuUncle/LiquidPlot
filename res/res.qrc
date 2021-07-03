@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/res">
-        <file>res/ttf/led_board-7.ttf</file>
+        <file>ttf/led_board-7.ttf</file>
     </qresource>
 </RCC>

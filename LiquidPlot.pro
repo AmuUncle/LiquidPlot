@@ -12,13 +12,14 @@ TARGET = LiquidPlot
 TEMPLATE = app
 
 include ($$PWD/public/public.pri)
+INCLUDEPATH += $$PWD/include
 
-SOURCES += main.cpp\
-        liquidplot.cpp \
-    mainwnd.cpp
+SOURCES += source/main.cpp\
+         source/liquidplot.cpp \
+        source/mainwnd.cpp
 
-HEADERS  += liquidplot.h \
-    mainwnd.h
+HEADERS  += include/liquidplot.h \
+    include/mainwnd.h
 
 RESOURCES += \
-    res.qrc
+    res/res.qrc

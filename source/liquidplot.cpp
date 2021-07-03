@@ -132,7 +132,7 @@ void LiquidPlot::DrawCircularPlot(QPainter *p, QRect rcRect)
 
     //颜色及透明度设置
     QColor waterColor1 = QColor("#6193F9");
-    waterColor1.setAlpha(240);
+    waterColor1.setAlpha(200);
     QColor waterColor2 = QColor("#7cc4c9");
     waterColor2.setAlpha(85);
     QColor waterColor3 = QColor("#A5C2FC");
@@ -172,7 +172,7 @@ void LiquidPlot::DrawCircularPlot(QPainter *p, QRect rcRect)
 
 void LiquidPlot::timerEvent(QTimerEvent *event)
 {
-    m_fOffset += 1.0;
+    m_fOffset += 2.0;
     update();
 }
 
@@ -183,10 +183,10 @@ void LiquidPlot::CreateAllChildWnd()
 
 void LiquidPlot::InitCtrl()
 {
-    setFixedSize(350, 350);
+    setFixedSize(200, 200);
     startTimer(60);
 
-    int nFontId = QFontDatabase::addApplicationFont(":/res/res/ttf/led_board-7.ttf");
+    int nFontId = QFontDatabase::addApplicationFont(":/res/ttf/led_board-7.ttf");
     QStringList strlistFontName = QFontDatabase::applicationFontFamilies(nFontId);
 
     if (strlistFontName.count() > 0)

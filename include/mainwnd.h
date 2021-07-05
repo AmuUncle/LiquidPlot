@@ -15,6 +15,7 @@ private:
     void InitSolts();
     void Relayout();
 
+    bool eventFilter(QObject *watched, QEvent *evt);
 };
 
 #endif // MAINWND_H

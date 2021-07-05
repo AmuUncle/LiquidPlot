@@ -3,6 +3,8 @@
 #include "liquidplot.h"
 #include <QVariant>
 #include <QSlider>
+#include <QMouseEvent>
+#include <QColorDialog>
 
 
 MainWnd::MainWnd(QWidget *parent) : QWidget(parent)
@@ -35,15 +37,31 @@ void MainWnd::Relayout()
 {
     LiquidPlot *pLiquidPlot1 = new LiquidPlot(this);
     LiquidPlot *pLiquidPlot2 = new LiquidPlot(this);
-//    LiquidPlot *pLiquidPlot3 = new LiquidPlot(this);
-//    LiquidPlot *pLiquidPlot4 = new LiquidPlot(this);
+    LiquidPlot *pLiquidPlot3 = new LiquidPlot(this);
+    LiquidPlot *pLiquidPlot4 = new LiquidPlot(this);
+
+    pLiquidPlot2->SetWaterColor(QColor("#DEAF39"));
+    pLiquidPlot3->SetWaterColor(QColor("#FF6B6B"));
+    pLiquidPlot4->SetWaterColor(QColor("#18BD9B"));
 
     pLiquidPlot2->SetPlotType(LiquidPlot::PLOTTYPE_RECTANGLE);
+    pLiquidPlot3->SetPlotType(LiquidPlot::PLOTTYPE_DIAMOND);
+    pLiquidPlot4->SetPlotType(LiquidPlot::PLOTTYPE_RECTANGLE);
+
+    pLiquidPlot1->EnableSpace(false);
+    pLiquidPlot4->EnableSpace(false);
+
+    pLiquidPlot1->installEventFilter(this);
+    pLiquidPlot2->installEventFilter(this);
+    pLiquidPlot3->installEventFilter(this);
+    pLiquidPlot4->installEventFilter(this);
 
     // 滑动条
     QSlider *pSlider = new QSlider(this);
     connect(pSlider, &QSlider::valueChanged, pLiquidPlot1, &LiquidPlot::SetPercent);
     connect(pSlider, &QSlider::valueChanged, pLiquidPlot2, &LiquidPlot::SetPercent);
+    connect(pSlider, &QSlider::valueChanged, pLiquidPlot3, &LiquidPlot::SetPercent);
+    connect(pSlider, &QSlider::valueChanged, pLiquidPlot4, &LiquidPlot::SetPercent);
 
     pSlider->setOrientation(Qt::Horizontal);
     pSlider->setMinimum(0);
@@ -51,16 +69,55 @@ void MainWnd::Relayout()
     pSlider->setSingleStep(1);
     pSlider->setValue(50);
 
-//    connect(pSlider, &QSlider::valueChanged, pLiquidPlot3, &LiquidPlot::SetPercent);
-//    connect(pSlider, &QSlider::valueChanged, pLiquidPlot4, &LiquidPlot::SetPercent);
+    QSlider *pSliderSpeed = new QSlider(this);
+    connect(pSliderSpeed, &QSlider::valueChanged, pLiquidPlot1, &LiquidPlot::SetSpeed);
+    connect(pSliderSpeed, &QSlider::valueChanged, pLiquidPlot2, &LiquidPlot::SetSpeed);
+    connect(pSliderSpeed, &QSlider::valueChanged, pLiquidPlot3, &LiquidPlot::SetSpeed);
+    connect(pSliderSpeed, &QSlider::valueChanged, pLiquidPlot4, &LiquidPlot::SetSpeed);
+
+    pSliderSpeed->setOrientation(Qt::Horizontal);
+    pSliderSpeed->setMinimum(1);
+    pSliderSpeed->setMaximum(100);
+    pSliderSpeed->setSingleStep(1);
+    pSliderSpeed->setValue(10);
 
     QGridLayout *layoutMain = new QGridLayout(this);
     layoutMain->addWidget(pLiquidPlot1, 0, 0);
     layoutMain->addWidget(pLiquidPlot2, 0, 1);
-//    layoutMain->addWidget(pLiquidPlot3, 1, 0);
-//    layoutMain->addWidget(pLiquidPlot4, 1, 1);
+    layoutMain->addWidget(pLiquidPlot3, 1, 0);
+    layoutMain->addWidget(pLiquidPlot4, 1, 1);
 
     layoutMain->addWidget(pSlider, 2, 0, 1, 2);
+    layoutMain->addWidget(pSliderSpeed, 3, 0, 1, 2);
 
     layoutMain->setMargin(8);
+}
+
+bool MainWnd::eventFilter(QObject *watched, QEvent *evt)
+{
+    QWidget *w = (QWidget *)watched;
+    if (!w->property("LiquidPlot").toBool()) {
+        return QObject::eventFilter(watched, evt);
+    }
+
+    QMouseEvent *event = static_cast<QMouseEvent *>(evt);
+    if (event->type() == QEvent::MouseButtonDblClick)
+    {
+        if (event->button() == Qt::LeftButton)
+        {
+            LiquidPlot *pLiquidPlot = (LiquidPlot *)w;
+
+            QColorDialog color;//调出颜色选择器对话框
+            bool ok = false;
+            QColor c = color.getRgba(pLiquidPlot->GetWaterColor().rgba(), &ok);
+            if (ok)
+            {
+                pLiquidPlot->SetWaterColor(c);
+            }
+
+            return true;
+        }
+    }
+
+    return QObject::eventFilter(watched, evt);
 }

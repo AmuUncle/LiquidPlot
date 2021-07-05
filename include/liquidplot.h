@@ -19,10 +19,18 @@ public:
     };
 
 public slots:
-    void SetPercent(int nPercent) { m_nPercent = nPercent; update(); }
+    void SetPercent(int nPercent);
     int GetPercent() { return m_nPercent; }
 
     void SetPlotType(EPlotType ePlotType) { m_ePlotType = ePlotType; update(); }
+
+    void SetSpeed(int nSpeed) { m_nSpeed = nSpeed; }
+    int GetSpeed() { return m_nSpeed; }
+
+    void SetWaterColor(QColor colorWater) { m_colorWater = colorWater; update(); }
+    QColor GetWaterColor() { return m_colorWater; }
+
+    void EnableSpace(bool bEnableSpace) { m_bEnableSpace = bEnableSpace; update(); }
 
 private:
     void paintEvent(QPaintEvent *event);
@@ -40,6 +48,10 @@ private:
     QFont m_iconFont;
     int m_nPercent;
     uint m_fOffset;
+    int m_nSpeed;
+    bool m_bEnableSpace;
+
+    QColor m_colorWater;
 };
 
 #endif // LIQUIDPLOT_H

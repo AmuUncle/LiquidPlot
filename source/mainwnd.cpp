@@ -5,13 +5,14 @@
 #include <QSlider>
 #include <QMouseEvent>
 #include <QColorDialog>
+#include <QDebug>
+#include <QPropertyAnimation>
 
 
 MainWnd::MainWnd(QWidget *parent) : QWidget(parent)
 {
     setProperty("canMove", "true");
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint);
-
+    setMinimumSize(400, 400);
     CreateAllChildWnd();
     InitCtrl();
     InitSolts();
@@ -80,6 +81,23 @@ void MainWnd::Relayout()
     pSliderSpeed->setMaximum(100);
     pSliderSpeed->setSingleStep(1);
     pSliderSpeed->setValue(10);
+
+    setProperty("RotationAngle", 1.0);
+    QPropertyAnimation *m_pAnimationOpacity = new QPropertyAnimation(this, "RotationAngle");
+    m_pAnimationOpacity->setDuration(1000);
+    m_pAnimationOpacity->setEasingCurve(QEasingCurve::OutCubic);  // 缓和曲线风格
+    m_pAnimationOpacity->setStartValue(0.0);
+    m_pAnimationOpacity->setEndValue(50.0);
+
+    connect(m_pAnimationOpacity, &QPropertyAnimation::valueChanged, [=](const QVariant &value)
+    {
+        pLiquidPlot1->SetPercent(value.toInt());
+        pLiquidPlot2->SetPercent(value.toInt());
+        pLiquidPlot3->SetPercent(value.toInt());
+        pLiquidPlot4->SetPercent(value.toInt());
+    });
+
+    m_pAnimationOpacity->start();
 
     QGridLayout *layoutMain = new QGridLayout(this);
     layoutMain->addWidget(pLiquidPlot1, 0, 0);

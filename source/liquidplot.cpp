@@ -238,7 +238,8 @@ void LiquidPlot::DrawCircularPlot(QPainter *p, QRect rcRect)
             {
                 QRect rcClip = rcBase.adjusted(5, 5, -5, -5);
                 QPolygon py;
-                py << QPoint(rcClip.center().x(), rcClip.top()) << QPoint(rcClip.right(), rcClip.center().y())
+                py << QPoint(rcClip.center().x(), rcClip.top())
+                   << QPoint(rcClip.right(), rcClip.center().y())
                         << QPoint(rcClip.center().x(), rcClip.bottom())
                          << QPoint(rcClip.left(), rcClip.center().y());
 
@@ -251,12 +252,11 @@ void LiquidPlot::DrawCircularPlot(QPainter *p, QRect rcRect)
     p->save();
     QFont font1 = m_iconFont;
     font1.setBold(true);
-    font1.setPointSize(25);
+    font1.setPixelSize(40);
     p->setFont(font1);
     p->setPen(QColor("#4A535C"));
     p->drawText(QRect(0, 0, 350, 350), Qt::AlignCenter, QString("%1%").arg(m_nPercent));
     p->restore();
-
 
     p->restore();
 }
@@ -278,7 +278,6 @@ void LiquidPlot::CreateAllChildWnd()
 void LiquidPlot::InitCtrl()
 {
     setProperty("LiquidPlot", "true");
-    setFixedSize(200, 200);
     startTimer(60);
 
     int nFontId = QFontDatabase::addApplicationFont(":/res/ttf/led_board-7.ttf");
